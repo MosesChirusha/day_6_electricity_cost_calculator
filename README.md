@@ -2,15 +2,16 @@
 
 A simple, offline-first electricity consumption calculator for African households. Track appliance usage, calculate costs, and reduce your electricity bill.
 
-**Live Demo**: [Your Demo URL]
+**Live Demo**: [Demo URL](https://moseschirusha.github.io/day_6_electricity_cost_calculator)
+**Medium Article**: [Link](https://moseschirusha.medium.com/why-your-electricity-bill-is-higher-than-it-should-be-and-how-to-fix-it-45752f912286)
 
 ## Quick Start
 
 ```bash
 # Clone and run
-git clone https://github.com/yourusername/electricity-calculator-africa.git
-cd electricity-calculator-africa
-open electricity-calculator.html
+git clone https://github.com/MosesChirusha/day_6_electricity_cost_calculator
+cd day_6_electricity_cost_calculator
+open index.html
 ```
 
 No build tools, no dependencies, no npm install.
@@ -89,14 +90,7 @@ No build tools, no dependencies, no npm install.
 
 ## License
 
-MIT License - use freely, modify, distribute. See [LICENSE](LICENSE) for details.
+MIT License - use freely, modify, distribute.
 
-## Contact
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/electricity-calculator-africa/issues)
-- **Email**: your.email@example.com
-- **Twitter**: [@yourhandle](https://twitter.com/yourhandle)
 
 **Part of 90-Day Coding Challenge for African Development** | Day 6 of 90
-
-Previous: [Day 5 - Vaccination Tracker](../day-5-vaccination-tracker) | Next: [Day 7 - Water Calculator](../day-7-water-calculator)
