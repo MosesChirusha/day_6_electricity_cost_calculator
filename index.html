@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Cost Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Electricity Cost Calculator</h1>
+            <p>Calculate and manage your household electricity consumption</p>
+        </header>
+
+        <div class="settings-card">
+            <h2>Your Settings</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="country">
+                        Country / Region
+                    </label>
+                    <select id="country" onchange="updateCurrency()">
+                        <option value="">Select your country</option>
+                        <optgroup label="East Africa">
+                            <option value="KE">Kenya</option>
+                            <option value="TZ">Tanzania</option>
+                            <option value="UG">Uganda</option>
+                            <option value="RW">Rwanda</option>
+                            <option value="ET">Ethiopia</option>
+                        </optgroup>
+                        <optgroup label="West Africa">
+                            <option value="NG">Nigeria</option>
+                            <option value="GH">Ghana</option>
+                            <option value="SN">Senegal</option>
+                            <option value="CI">Côte d'Ivoire</option>
+                            <option value="ML">Mali</option>
+                        </optgroup>
+                        <optgroup label="Southern Africa">
+                            <option value="ZA">South Africa</option>
+                            <option value="ZW">Zimbabwe</option>
+                            <option value="ZM">Zambia</option>
+                            <option value="BW">Botswana</option>
+                        </optgroup>
+                        <optgroup label="North Africa">
+                            <option value="EG">Egypt</option>
+                            <option value="MA">Morocco</option>
+                            <option value="TN">Tunisia</option>
+                        </optgroup>
+                        <optgroup label="Central Africa">
+                            <option value="CM">Cameroon</option>
+                            <option value="CD">DR Congo</option>
+                        </optgroup>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="currency">
+                        Currency
+                    </label>
+                    <select id="currency">
+                        <option value="KES">KES - Kenyan Shilling</option>
+                        <option value="NGN">NGN - Nigerian Naira</option>
+                        <option value="GHS">GHS - Ghanaian Cedi</option>
+                        <option value="ZAR">ZAR - South African Rand</option>
+                        <option value="TZS">TZS - Tanzanian Shilling</option>
+                        <option value="UGX">UGX - Ugandan Shilling</option>
+                        <option value="EGP">EGP - Egyptian Pound</option>
+                        <option value="MAD">MAD - Moroccan Dirham</option>
+                        <option value="XOF">XOF - West African CFA</option>
+                        <option value="XAF">XAF - Central African CFA</option>
+                        <option value="CDF">CDF - Congolese Franc</option>
+                        <option value="USD">USD - US Dollar</option>
+                    </select>
+                </div>
+
+                <div class="form-group currency-prefix">
+                    <label for="electricityRate">
+                        Electricity Rate (per kWh)
+                    </label>
+                    <span class="currency-symbol" id="currencySymbol">KES</span>
+                    <input type="number" id="electricityRate" step="0.01" min="0" value="24.00" oninput="calculateAll()">
+                    <span class="help-text">Check your utility bill for exact rate</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="billingPeriod">
+                        Billing Period
+                    </label>
+                    <select id="billingPeriod" onchange="calculateAll()">
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly" selected>Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="alert alert-info" id="countryInfo" style="display: none;"></div>
+        </div>
+
+        <div class="appliances-section">
+            <h2>Your Appliances</h2>
+            <button class="btn-success" onclick="openAddModal()" style="margin-bottom: 20px;">
+                + Add Appliance
+            </button>
+            <button class="btn-secondary" onclick="exportData()" style="margin-bottom: 20px; margin-left: 10px;">
+                Export Report
+            </button>
+            
+            <div id="applianceGrid" class="appliance-grid"></div>
+            
+            <div id="emptyState" style="text-align: center; padding: 40px; color: #718096; display: none;">
+                <p style="font-size: 1.2em; margin-bottom: 10px;">No appliances added yet</p>
+                <p>Click "+ Add Appliance" to start tracking your electricity usage</p>
+            </div>
+        </div>
+
+        <div class="summary-section">
+            <h2>Cost Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-label">Total Power</div>
+                    <div class="summary-value" id="totalPower">0 W</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Daily Energy</div>
+                    <div class="summary-value" id="dailyEnergy">0 kWh</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label">Daily Cost</div>
+                    <div class="summary-value" id="dailyCost">0</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-label" id="periodLabel">Monthly Cost</div>
+                    <div class="summary-value" id="periodCost">0</div>
+                </div>
+            </div>
+
+            <div class="tips-section">
+                <h3>Energy Saving Tips</h3>
+                <ul id="savingTips"></ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="addApplianceModal" class="modal">
+        <div class="modal-content">
+            <h2>Add New Appliance</h2>
+            
+            <h3 style="margin-top: 0; margin-bottom: 15px; color: #4a5568;">Quick Presets</h3>
+            <div class="preset-grid" id="presetGrid"></div>
+
+            <h3 style="margin-top: 20px; margin-bottom: 15px; color: #4a5568;">Custom Appliance</h3>
+            <form id="applianceForm" onsubmit="addAppliance(event)">
+                <div class="form-group">
+                    <label for="applianceName">Appliance Name:</label>
+                    <input type="text" id="applianceName" required placeholder="e.g., Living Room TV">
+                </div>
+
+                <div class="form-group">
+                    <label for="appliancePower">Power Rating (Watts):</label>
+                    <input type="number" id="appliancePower" min="1" required placeholder="e.g., 100">
+                    <span class="help-text">Check the appliance label or manual</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="applianceHours">Hours Used Per Day:</label>
+                    <input type="number" id="applianceHours" min="0" max="24" step="0.5" required placeholder="e.g., 8">
+                </div>
+
+                <div class="form-group">
+                    <label for="applianceQuantity">Quantity:</label>
+                    <input type="number" id="applianceQuantity" min="1" value="1" required>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 20px;">
+                    <button type="submit" class="btn-primary" style="flex: 1;">Add Appliance</button>
+                    <button type="button" class="btn-secondary" style="flex: 1;" onclick="closeAddModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
